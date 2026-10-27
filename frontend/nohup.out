@@ -1,0 +1,50 @@
+
+> frontend@0.0.0 dev
+> vite
+
+
+  VITE v7.3.1  ready in 695 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.1.65:3000/
+
+> frontend@0.0.0 dev
+> vite
+
+
+  VITE v7.3.1  ready in 425 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.1.65:3000/
+4:00:51 PM [vite] vite.config.js changed, restarting server...
+4:00:51 PM [vite] server restarted.
+4:00:51 PM [vite] vite.config.js changed, restarting server...
+4:00:52 PM [vite] server restarted.
+4:01:02 PM [vite] vite.config.js changed, restarting server...
+4:01:02 PM [vite] server restarted.
+4:01:03 PM [vite] vite.config.js changed, restarting server...
+4:01:03 PM [vite] server restarted.
+4:10:48 PM [vite] (client) hmr update /src/views/Dashboard.vue, /src/views/resource/PopPointList.vue, /src/views/resource/PopPointDetail.vue, /src/views/resource/VPSList.vue, /src/views/resource/VPSDetail.vue, /src/views/resource/EdgeList.vue, /src/views/resource/EdgeDetail.vue
+4:14:38 PM [vite] (client) page reload src/router/index.js
+4:14:53 PM [vite] (client) hmr update /src/views/resource/VPSList.vue
+4:15:05 PM [vite] (client) hmr update /src/views/resource/VPSList.vue
+4:15:12 PM [vite] (client) hmr update /src/views/resource/VPSList.vue
+4:15:19 PM [vite] (client) hmr update /src/views/resource/VPSList.vue
+4:15:32 PM [vite] (client) hmr update /src/views/resource/VPSDetail.vue
+4:16:02 PM [vite] (client) hmr update /src/views/resource/VPSDetail.vue
+4:16:23 PM [vite] vite.config.js changed, restarting server...
+4:16:23 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+4:16:23 PM [vite] server restarted.
+4:42:28 PM [vite] (client) hmr update /src/views/resource/VPSList.vue, /src/views/resource/VPSDetail.vue, /src/views/resource/VPSVncConsole.vue, /src/views/resource/EdgeList.vue, /src/views/resource/EdgeDetail.vue, /src/views/resource/PopPointList.vue, /src/views/resource/PopPointDetail.vue
+4:42:41 PM [vite] (client) hmr update /src/views/resource/EdgeList.vue
+4:45:05 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:45:11 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:45:23 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:45:34 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:45:49 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:46:00 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:46:18 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:46:30 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:46:40 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:56:39 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue
+4:56:46 PM [vite] (client) hmr update /src/views/resource/EdgeDetail.vue

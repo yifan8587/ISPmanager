@@ -1,0 +1,23 @@
+asgiref==3.11.1
+Django==6.0.3
+django-cors-headers==4.9.0
+django-filter==25.2
+djangorestframework==3.16.1
+djangorestframework_simplejwt==5.5.1
+mysqlclient==2.2.8
+PyJWT==2.11.0
+sqlparse==0.5.5
+drf-spectacular==0.28.0
+# WebSSH / 部署 / 节点数据同步
+channels==4.3.2
+channels-redis==4.3.0
+daphne==4.1.2
+paramiko==3.5.1
+requests==2.32.3
+cryptography==49.0.0
+websockets==15.0.1
+uvicorn[standard]==0.34.0
+# 生产 WSGI/ASGI 服务器
+gunicorn==23.0.0
+# Excel 导入导出
+openpyxl==3.1.5

@@ -1,0 +1,68 @@
+# 由 deploy 脚本渲染到 /etc/nginx/snippets/ispmanager-locations.conf
+# HTTP / HTTPS 两个 server 共用，保证门户、管理端、Admin、API 路径一致
+
+location = /admin {
+    return 301 /admin/;
+}
+location ^~ /admin/ {
+    proxy_pass http://ispmanager_backend;
+    include snippets/ispmanager-proxy.conf;
+}
+
+location ^~ /api/ {
+    proxy_pass http://ispmanager_backend;
+    include snippets/ispmanager-proxy.conf;
+    proxy_read_timeout 300s;
+}
+
+location ^~ /ws/ {
+    proxy_pass http://ispmanager_backend;
+    include snippets/ispmanager-proxy.conf;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade    $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_buffering off;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+}
+
+location ^~ /static/ {
+    alias __STATIC_ROOT__/;
+    access_log off;
+    expires 30d;
+    add_header Cache-Control "public, max-age=2592000";
+}
+location = /static {
+    return 301 /static/;
+}
+
+location ^~ /media/ {
+    alias __MEDIA_ROOT__/;
+    access_log off;
+}
+
+location = __ADMIN_BASE_PATH__ {
+    return 301 __ADMIN_BASE_PATH__/;
+}
+location ^~ __ADMIN_BASE_PATH__/ {
+    alias __ADMIN_DIST__/;
+    index index.html;
+    error_page 404 = @manager_spa;
+}
+
+location @manager_spa {
+    rewrite ^ __ADMIN_BASE_PATH__/index.html last;
+}
+
+root __PORTAL_DIST__;
+index index.html;
+location / {
+    try_files $uri $uri/ /index.html;
+}
+
+location ~* \.(?:js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|gif|ico|map)$ {
+    root __PORTAL_DIST__;
+    expires 7d;
+    access_log off;
+    try_files $uri =404;
+}

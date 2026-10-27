@@ -1,0 +1,22 @@
+[Unit]
+Description=ISPmanager instance expiry (remind / suspend / recycle)
+After=network-online.target mysql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=__APP_USER__
+Group=__APP_GROUP__
+WorkingDirectory=__BACKEND_DIR__
+
+EnvironmentFile=-__RUNTIME_ENV_FILE__
+Environment=PYTHONUNBUFFERED=1
+
+# 默认只催缴与到期通知；打开系统参数或给命令加 --apply-suspend / --apply-recycle 才会停机、回收
+ExecStart=__VENV_DIR__/bin/python manage.py process_instance_expiry
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

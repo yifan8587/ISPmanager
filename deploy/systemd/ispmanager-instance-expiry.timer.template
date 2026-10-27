@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily ISPmanager instance expiry check
+
+[Timer]
+OnCalendar=*-*-* 09:00:00
+Persistent=true
+RandomizedDelaySec=300
+Unit=ispmanager-instance-expiry.service
+
+[Install]
+WantedBy=timers.target

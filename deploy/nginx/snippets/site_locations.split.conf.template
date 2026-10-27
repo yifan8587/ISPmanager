@@ -1,0 +1,66 @@
+# 分机部署：本机只提供管理端、Django Admin 和管理 API。
+# 客户门户页面在另一台服务器。门户数据走独立的门户 API 端口，不从这里进入。
+
+location = /admin {
+    return 301 /admin/;
+}
+location ^~ /admin/ {
+    proxy_pass http://ispmanager_backend;
+    include snippets/ispmanager-proxy.conf;
+}
+
+location = /api/portal {
+    return 444;
+}
+location ^~ /api/portal/ {
+    return 444;
+}
+
+location ^~ /api/ {
+    proxy_pass http://ispmanager_backend;
+    include snippets/ispmanager-proxy.conf;
+    proxy_read_timeout 300s;
+}
+
+location ^~ /ws/ {
+    proxy_pass http://ispmanager_backend;
+    include snippets/ispmanager-proxy.conf;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade    $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_buffering off;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+}
+
+location ^~ /static/ {
+    alias __STATIC_ROOT__/;
+    access_log off;
+    expires 30d;
+    add_header Cache-Control "public, max-age=2592000";
+}
+location = /static {
+    return 301 /static/;
+}
+
+location ^~ /media/ {
+    alias __MEDIA_ROOT__/;
+    access_log off;
+}
+
+location = __ADMIN_BASE_PATH__ {
+    return 301 __ADMIN_BASE_PATH__/;
+}
+location ^~ __ADMIN_BASE_PATH__/ {
+    alias __ADMIN_DIST__/;
+    index index.html;
+    error_page 404 = @manager_spa;
+}
+
+location @manager_spa {
+    rewrite ^ __ADMIN_BASE_PATH__/index.html last;
+}
+
+location / {
+    return 302 __ADMIN_BASE_PATH__/;
+}

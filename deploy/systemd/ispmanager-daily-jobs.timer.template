@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily ISPmanager billing and SLA jobs
+
+[Timer]
+OnCalendar=*-*-* 01:15:00
+Persistent=true
+RandomizedDelaySec=180
+Unit=ispmanager-daily-jobs.service
+
+[Install]
+WantedBy=timers.target

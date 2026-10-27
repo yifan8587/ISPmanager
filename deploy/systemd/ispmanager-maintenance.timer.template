@@ -1,0 +1,11 @@
+[Unit]
+Description=Every 15 minutes ISPmanager maintenance
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+RandomizedDelaySec=60
+Unit=ispmanager-maintenance.service
+
+[Install]
+WantedBy=timers.target

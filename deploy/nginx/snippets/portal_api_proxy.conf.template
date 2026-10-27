@@ -1,0 +1,17 @@
+# 门户 API 反代。通道头由本文件写入，不接受客户端自己带来的值。
+proxy_pass http://ispmanager_backend;
+proxy_http_version 1.1;
+proxy_set_header Host               $host;
+proxy_set_header X-Real-IP          $portal_real_ip;
+proxy_set_header X-Forwarded-For    $portal_forwarded_for;
+proxy_set_header X-Forwarded-Proto  __FORWARDED_PROTO__;
+proxy_set_header X-Forwarded-Host   $host;
+proxy_set_header X-Forwarded-Port   __PUBLIC_PORT__;
+proxy_set_header X-ISP-Portal-Channel 1;
+proxy_set_header X-ISP-Portal-Key   $http_x_isp_portal_key;
+proxy_set_header Upgrade            $http_upgrade;
+proxy_set_header Connection         $connection_upgrade;
+proxy_read_timeout 3600s;
+proxy_send_timeout 3600s;
+proxy_buffering off;
+proxy_redirect off;

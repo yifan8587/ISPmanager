@@ -1,0 +1,28 @@
+[Unit]
+Description=ISPmanager POP Quality Monitor
+After=network-online.target mysql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__APP_USER__
+Group=__APP_GROUP__
+WorkingDirectory=__BACKEND_DIR__
+
+# 与 Django 主服务使用同一份数据库及系统配置；文件不存在时仍可用于开发环境。
+EnvironmentFile=-__RUNTIME_ENV_FILE__
+Environment=PYTHONUNBUFFERED=1
+
+ExecStart=__VENV_DIR__/bin/python manage.py run_pop_quality_monitor \
+    --poll-seconds 5 --batch-size 20 --retention-days 90
+
+KillMode=mixed
+Restart=always
+RestartSec=5
+TimeoutStopSec=45
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

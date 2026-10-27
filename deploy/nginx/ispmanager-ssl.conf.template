@@ -1,0 +1,53 @@
+# ════════════════════════════════════════════════════════════════
+# 单域名路径分流（HTTP + HTTPS）
+#   HTTP：ACME 校验；可选跳转 HTTPS，或在 NAT 仅转发 80 时继续提供站点
+#   HTTPS：门户 / 管理端 / Django Admin
+# ════════════════════════════════════════════════════════════════
+
+upstream ispmanager_backend {
+    server __APP_BIND__;
+}
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+# ── HTTP：ACME + 跳转或同站 ──────────────────────────────────
+server {
+    listen __LISTEN_HTTP__ default_server;
+    listen [::]:__LISTEN_HTTP__ default_server;
+    server_name __SITE_DOMAIN__ __SITE_ALIASES__ __EXTRA_SERVER_NAMES__;
+
+    client_max_body_size 2048m;
+    # noVNC 的票据和登录令牌都在 WebSocket 查询串里，默认 8k 不够时握手会被直接掐断。
+    large_client_header_buffers 8 64k;
+
+    location ^~ /.well-known/acme-challenge/ {
+        root __CERTBOT_WEBROOT__;
+        default_type text/plain;
+        try_files $uri =404;
+    }
+
+    __HTTP_AFTER_ACME__
+}
+
+# ── HTTPS ────────────────────────────────────────────────────
+server {
+    listen __LISTEN_HTTPS__ ssl http2 default_server;
+    listen [::]:__LISTEN_HTTPS__ ssl http2 default_server;
+    server_name __SITE_DOMAIN__ __SITE_ALIASES__ __EXTRA_SERVER_NAMES__;
+
+    ssl_certificate     __SITE_SSL_CERT__;
+    ssl_certificate_key __SITE_SSL_KEY__;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:10m;
+    __HSTS_HEADER__
+
+    client_max_body_size 2048m;
+    large_client_header_buffers 8 64k;
+
+    include snippets/ispmanager-locations.conf;
+}

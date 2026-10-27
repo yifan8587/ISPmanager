@@ -1,0 +1,116 @@
+"""WebSSH 运维命令模板（下发到交互终端）。"""
+
+WEBSSH_COMMAND_TEMPLATES = [
+    {
+        'id': 'passwd',
+        'name': '修改系统密码',
+        'category': '系统',
+        'description': '启动 passwd 交互改密（请在终端内按提示输入新密码）',
+        'interactive': True,
+        'fields': [
+            {'key': 'username', 'label': '用户名', 'default': 'root', 'required': True},
+        ],
+        'command': 'passwd {username}',
+    },
+    {
+        'id': 'whoami',
+        'name': '当前用户',
+        'category': '系统',
+        'description': 'whoami && id',
+        'fields': [],
+        'command': 'whoami && id',
+    },
+    {
+        'id': 'uname',
+        'name': '系统信息',
+        'category': '系统',
+        'description': 'uname -a',
+        'fields': [],
+        'command': 'uname -a',
+    },
+    {
+        'id': 'uptime',
+        'name': '运行时间',
+        'category': '系统',
+        'description': 'uptime',
+        'fields': [],
+        'command': 'uptime',
+    },
+    {
+        'id': 'df',
+        'name': '磁盘使用',
+        'category': '系统',
+        'description': 'df -hT',
+        'fields': [],
+        'command': 'df -hT',
+    },
+    {
+        'id': 'nload',
+        'name': 'nload 流量监控',
+        'category': '网络',
+        'description': '实时网卡流量（需已安装 nload）',
+        'fields': [
+            {'key': 'iface', 'label': '网卡', 'default': 'eth0', 'required': True},
+        ],
+        'command': 'nload {iface}',
+    },
+    {
+        'id': 'iftop',
+        'name': 'iftop 连接监控',
+        'category': '网络',
+        'description': '按连接查看流量（需已安装 iftop）',
+        'fields': [
+            {'key': 'iface', 'label': '网卡', 'default': 'eth0', 'required': True},
+        ],
+        'command': 'iftop -i {iface}',
+    },
+    {
+        'id': 'iperf3_server',
+        'name': 'iperf3 服务端',
+        'category': '网络',
+        'description': '在本机启动 iperf3 监听',
+        'fields': [
+            {'key': 'port', 'label': '端口', 'default': '5201', 'required': True},
+        ],
+        'command': 'iperf3 -s -p {port}',
+    },
+    {
+        'id': 'iperf3_client',
+        'name': 'iperf3 客户端测速',
+        'category': '网络',
+        'description': '向远端 iperf3 服务端发起测试',
+        'fields': [
+            {'key': 'server', 'label': '服务端 IP', 'default': '', 'required': True},
+            {'key': 'port', 'label': '端口', 'default': '5201', 'required': True},
+            {'key': 'duration', 'label': '时长(秒)', 'default': '30', 'required': True},
+            {'key': 'parallel', 'label': '并行流', 'default': '1', 'required': False},
+        ],
+        'command': 'iperf3 -c {server} -p {port} -t {duration} -P {parallel}',
+    },
+    {
+        'id': 'ping',
+        'name': 'Ping 探测',
+        'category': '网络',
+        'description': 'ping 指定地址 4 次',
+        'fields': [
+            {'key': 'host', 'label': '目标', 'default': '8.8.8.8', 'required': True},
+        ],
+        'command': 'ping -c 4 {host}',
+    },
+    {
+        'id': 'ss_listen',
+        'name': '监听端口',
+        'category': '网络',
+        'description': 'ss -tulpn',
+        'fields': [],
+        'command': 'ss -tulpn',
+    },
+    {
+        'id': 'install_tools',
+        'name': '安装常用工具',
+        'category': '维护',
+        'description': 'Debian/Ubuntu 下安装 iperf3 nload iftop（需 root）',
+        'fields': [],
+        'command': 'export DEBIAN_FRONTEND=noninteractive && apt-get update -qq && apt-get install -y iperf3 nload iftop',
+    },
+]

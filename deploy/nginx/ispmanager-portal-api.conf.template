@@ -1,0 +1,41 @@
+# 门户 API。只接受门户服务器的来源地址，再由后端核对密钥和路径。
+# 浏览器不直接访问这里。ISPweb 网关校验通过后才会连上来。
+
+map $http_x_forwarded_for $portal_forwarded_for {
+    default $http_x_forwarded_for;
+    ""      $remote_addr;
+}
+
+map $http_x_real_ip $portal_real_ip {
+    default $http_x_real_ip;
+    ""      $remote_addr;
+}
+
+server {
+    __PORTAL_LISTEN__
+    server_name __SITE_DOMAIN__ __SITE_ALIASES__;
+
+    __PORTAL_ALLOWS__
+
+    client_max_body_size 2m;
+    large_client_header_buffers 8 64k;
+
+    location = /api/auth/token { include snippets/ispmanager-portal-proxy.conf; }
+    location = /api/auth/token/ { include snippets/ispmanager-portal-proxy.conf; }
+    location = /api/auth/token/refresh { include snippets/ispmanager-portal-proxy.conf; }
+    location = /api/auth/token/refresh/ { include snippets/ispmanager-portal-proxy.conf; }
+    location ^~ /api/auth/me { include snippets/ispmanager-portal-proxy.conf; }
+    location = /api/portal { include snippets/ispmanager-portal-proxy.conf; }
+    location ^~ /api/portal/ { include snippets/ispmanager-portal-proxy.conf; }
+    location = /api/customer/payment-transactions { include snippets/ispmanager-portal-proxy.conf; }
+    location ^~ /api/customer/payment-transactions/ { include snippets/ispmanager-portal-proxy.conf; }
+
+    # 超时和反代头只写在 ispmanager-portal-proxy.conf。这里再写 proxy_read_timeout 会让 nginx -t 失败。
+    location ^~ /ws/resource/vnc/ {
+        include snippets/ispmanager-portal-proxy.conf;
+    }
+
+    location / {
+        return 444;
+    }
+}

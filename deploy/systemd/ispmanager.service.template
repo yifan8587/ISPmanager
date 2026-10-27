@@ -1,0 +1,31 @@
+[Unit]
+Description=ISPmanager Django ASGI (gunicorn + uvicorn worker)
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=notify
+User=__APP_USER__
+Group=__APP_GROUP__
+WorkingDirectory=__BACKEND_DIR__
+
+# 运行时环境变量由 EnvironmentFile 注入（部署脚本据 .env 生成）
+EnvironmentFile=__RUNTIME_ENV_FILE__
+
+ExecStart=__VENV_DIR__/bin/gunicorn backend.asgi:application \
+    -c __DEPLOY_DIR__/gunicorn/gunicorn_conf.py
+
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+Restart=always
+RestartSec=3
+TimeoutStopSec=30
+LimitNOFILE=65535
+LimitNPROC=4096
+
+# 安全加固
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

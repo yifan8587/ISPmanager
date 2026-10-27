@@ -1,0 +1,24 @@
+[Unit]
+Description=ISPmanager daily billing / SLA / quality jobs
+After=network-online.target mysql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=__APP_USER__
+Group=__APP_GROUP__
+WorkingDirectory=__BACKEND_DIR__
+
+EnvironmentFile=-__RUNTIME_ENV_FILE__
+Environment=PYTHONUNBUFFERED=1
+
+ExecStart=-__VENV_DIR__/bin/python manage.py generate_traffic_billing_items
+ExecStart=-__VENV_DIR__/bin/python manage.py check_overdue_billings
+ExecStart=-__VENV_DIR__/bin/python manage.py process_support_sla
+ExecStart=-__VENV_DIR__/bin/python manage.py rollup_edge_quality_samples
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
